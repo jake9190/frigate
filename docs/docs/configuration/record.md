@@ -68,7 +68,15 @@ record:
 
 ## Will Frigate delete old recordings if my storage runs out?
 
-As of Frigate 0.12 if there is less than an hour left of storage, the oldest 2 hours of recordings will be deleted.
+As of Frigate 0.12 if there is less than an hour left of storage, the oldest 2 hours of recordings will be deleted. As of Frigate 0.15 this can be configured as needed to attempt to keep a specific number of minutes, or an amount of disk space available. When both `minutes_remaining` and `remaining_disk_space` are specified, the larger calculated number is used.
+
+```yaml
+record:
+  minutes_remaining: 120 # <- The number of minutes of recording time to free
+  remaining_disk_space: 100000 # <- maintain 100GB of free space
+```
+
+**WARNING**: Do not set both of these values to zero as disk space based cleanup will not run and you may run out of disk space unless other recording retention policies are sufficient to maintain free space.
 
 ## Configuring Recording Retention
 

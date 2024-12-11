@@ -75,6 +75,17 @@ class RecordConfig(FrigateBaseModel):
     expire_interval: int = Field(
         default=60,
         title="Number of minutes to wait between cleanup runs.",
+        ge=0,
+    )
+    minutes_remaining: int = Field(
+        default=120,
+        title="Minutes of remaining recording time on disk to perform recording cleanup",
+        ge=0,
+    )
+    remaining_disk_space: int = Field(
+        default=0,
+        title="The free disk space in MiB to perform recording cleanup",
+        ge=0,
     )
     retain: RecordRetainConfig = Field(
         default_factory=RecordRetainConfig, title="Record retention settings."
