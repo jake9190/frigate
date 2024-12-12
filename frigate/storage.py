@@ -99,7 +99,10 @@ class StorageMaintainer(threading.Thread):
         )
         remaining_storage = round(shutil.disk_usage(RECORD_DIR).free / pow(2, 20), 1)
         # The target is the total free space, so need to consider what we already have
-        return round(max(target_space_recording_time, target_space_minimum), 0) - remaining_storage
+        return (
+            round(max(target_space_recording_time, target_space_minimum), 0)
+            - remaining_storage
+        )
 
     def check_storage_needs_cleanup(self) -> bool:
         """Return if storage needs cleanup."""
