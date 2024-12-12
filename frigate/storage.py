@@ -77,12 +77,14 @@ class StorageMaintainer(threading.Thread):
             }
 
         return usages
-    
+
     def calculate_storage_recovery_target(self) -> int:
         hourly_bandwidth = sum(
             [b["bandwidth"] for b in self.camera_storage_stats.values()]
         )
-        time_recovery_target = (hourly_bandwidth / 60) * self.config.record.minutes_remaining
+        time_recovery_target = (
+            hourly_bandwidth / 60
+        ) * self.config.record.minutes_remaining
         remaining_space_target = self.config.record.remaining_disk_space
         logger.debug(
             f"Storage cleanup target: By time: {time_recovery_target} MiB, by space: {remaining_space_target} MiB."
