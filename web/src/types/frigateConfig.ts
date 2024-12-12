@@ -156,6 +156,11 @@ export interface CameraConfig {
         mode: string;
         objects: Record<string, unknown>;
       };
+      expire_interval: number;
+      cleanup_trigger_minutes: number;
+      cleanup_target_minutes: number;
+      cleanup_trigger_space: number;
+      cleanup_target_space: number;
     };
     export: {
       timelapse_args: string;
@@ -399,8 +404,10 @@ export interface FrigateConfig {
       };
     };
     expire_interval: number;
-    minutes_remaining: number;
-    remaining_disk_space: number;
+    cleanup_trigger_minutes: number;
+    cleanup_target_minutes: number;
+    cleanup_trigger_space: number;
+    cleanup_target_space: number;
     export: {
       timelapse_args: string;
     };

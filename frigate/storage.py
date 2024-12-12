@@ -90,22 +90,31 @@ class StorageMaintainer(threading.Thread):
         hourly_bandwidth = sum(
             [b["bandwidth"] for b in self.camera_storage_stats.values()]
         )
-        time_recovery_target = (
+        target_space_recording_time = (
             hourly_bandwidth / 60
-        ) * self.config.record.minutes_remaining
-        remaining_space_target = self.config.record.remaining_disk_space
+        ) * self.config.record.cleanup_target_minutes
+        target_space_minimum = self.config.record.cleanup_target_space
         logger.debug(
-            f"Storage cleanup target: By time: {time_recovery_target} MiB, by space: {remaining_space_target} MiB."
+            f"Storage cleanup target: {self.config.record.cleanup_target_minutes} minutes recording time: {target_space_recording_time} MB, by space: {target_space_minimum} MB."
         )
-        return max(time_recovery_target, remaining_space_target)
+        remaining_storage = round(shutil.disk_usage(RECORD_DIR).free / pow(2, 20), 1)
+        # The target is the total free space, so need to consider what we already have
+        return round(max(target_space_recording_time, target_space_minimum), 0) - remaining_storage
 
     def check_storage_needs_cleanup(self) -> bool:
         """Return if storage needs cleanup."""
         # disk_usage should not spin up disks
-        free_storage_target = self.calculate_storage_recovery_target()
+        hourly_bandwidth = sum(
+            [b["bandwidth"] for b in self.camera_storage_stats.values()]
+        )
+        trigger_recording_time = (
+            hourly_bandwidth / 60
+        ) * self.config.record.cleanup_trigger_minutes
+        trigger_space_min = self.config.record.cleanup_trigger_space
+        free_storage_target = max(trigger_recording_time, trigger_space_min)
         remaining_storage = round(shutil.disk_usage(RECORD_DIR).free / pow(2, 20), 1)
         logger.debug(
-            f"Storage cleanup check: {free_storage_target} target with remaining storage: {remaining_storage}."
+            f"Storage cleanup check: {free_storage_target} MB target (time: {trigger_recording_time}, min space: {trigger_space_min}) with remaining storage: {remaining_storage} MB."
         )
         return remaining_storage < free_storage_target
 

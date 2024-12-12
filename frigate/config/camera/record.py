@@ -77,14 +77,24 @@ class RecordConfig(FrigateBaseModel):
         title="Number of minutes to wait between cleanup runs.",
         ge=0,
     )
-    minutes_remaining: int = Field(
-        default=120,
-        title="Minutes of remaining recording time on disk to perform recording cleanup",
+    cleanup_trigger_minutes: int = Field(
+        default=60,
+        title="Minutes of remaining recording time remaining on disk to perform recording cleanup",
         ge=0,
     )
-    remaining_disk_space: int = Field(
+    cleanup_trigger_space: int = Field(
         default=0,
-        title="The free disk space in MiB to perform recording cleanup",
+        title="Space remaining on disk to perform recording cleanup.",
+        ge=0,
+    )
+    cleanup_target_minutes: int = Field(
+        default=120,
+        title="Minutes of remaining recording time to remove once below threshold.",
+        ge=0,
+    )
+    cleanup_target_space: int = Field(
+        default=0,
+        title="Amount of space to free once below threshold.",
         ge=0,
     )
     retain: RecordRetainConfig = Field(
