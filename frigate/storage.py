@@ -94,7 +94,7 @@ class StorageMaintainer(threading.Thread):
     def check_storage_needs_cleanup(self) -> bool:
         """Return if storage needs cleanup."""
         # disk_usage should not spin up disks
-        free_storage_target = self.calculate_storage_recovery_target
+        free_storage_target = self.calculate_storage_recovery_target()
         remaining_storage = round(shutil.disk_usage(RECORD_DIR).free / pow(2, 20), 1)
         logger.debug(
             f"Storage cleanup check: {free_storage_target} target with remaining storage: {remaining_storage}."
@@ -105,7 +105,7 @@ class StorageMaintainer(threading.Thread):
         """Remove oldest recordings to meet cleanup target."""
         logger.debug("Starting storage cleanup.")
         deleted_segments_size = 0
-        free_storage_target = self.calculate_storage_recovery_target
+        free_storage_target = self.calculate_storage_recovery_target()
 
         recordings: Recordings = (
             Recordings.select(
