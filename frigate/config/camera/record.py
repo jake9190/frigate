@@ -112,7 +112,7 @@ class RecordConfig(FrigateBaseModel):
     export: RecordExportConfig = Field(
         default_factory=RecordExportConfig, title="Recording Export Config"
     )
-    export: RecordCleanupConfig = Field(
+    cleanup: RecordCleanupConfig = Field(
         default_factory=RecordCleanupConfig, title="Recording Cleanup Config"
     )
     preview: RecordPreviewConfig = Field(
