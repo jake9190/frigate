@@ -156,12 +156,14 @@ export interface CameraConfig {
         mode: string;
         objects: Record<string, unknown>;
       };
-      expire_interval: number;
-      cleanup_trigger_minutes: number;
-      cleanup_target_minutes: number;
-      cleanup_trigger_space: number;
-      cleanup_target_space: number;
     };
+    expire_interval: number;
+    cleanup: {
+      trigger_minutes: number;
+      target_minutes: number;
+      trigger_space: number;
+      target_space: number;
+    }
     export: {
       timelapse_args: string;
     };
@@ -404,10 +406,12 @@ export interface FrigateConfig {
       };
     };
     expire_interval: number;
-    cleanup_trigger_minutes: number;
-    cleanup_target_minutes: number;
-    cleanup_trigger_space: number;
-    cleanup_target_space: number;
+    cleanup: {
+      trigger_minutes: number;
+      target_minutes: number;
+      trigger_space: number;
+      target_space: number;
+    }
     export: {
       timelapse_args: string;
     };

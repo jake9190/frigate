@@ -92,8 +92,8 @@ class StorageMaintainer(threading.Thread):
         )
         target_space_recording_time = (
             hourly_bandwidth / 60
-        ) * self.config.record.cleanup_target_minutes
-        target_space_minimum = self.config.record.cleanup_target_space
+        ) * self.config.record.cleanup.target_minutes
+        target_space_minimum = self.config.record.cleanup.target_space
         cleanup_target = round(
             max(target_space_recording_time, target_space_minimum), 1
         )
@@ -101,7 +101,7 @@ class StorageMaintainer(threading.Thread):
         # The target is the total free space, so need to consider what is already free on disk
         space_to_clean = cleanup_target - remaining_storage
         logger.debug(
-            f"Will attempt to remove {space_to_clean} MB of recordings (target of {cleanup_target} MB - currently free {remaining_storage} MB). Config: {target_space_minimum} MB by space, {target_space_recording_time} MB by recording time ({self.config.record.cleanup_target_minutes} minutes)"
+            f"Will attempt to remove {space_to_clean} MB of recordings (target of {cleanup_target} MB - currently free {remaining_storage} MB). Config: {target_space_minimum} MB by space, {target_space_recording_time} MB by recording time ({self.config.record.cleanup.target_minutes} minutes)"
         )
         return space_to_clean
 
@@ -113,13 +113,13 @@ class StorageMaintainer(threading.Thread):
         )
         trigger_recording_space = (
             hourly_bandwidth / 60
-        ) * self.config.record.cleanup_trigger_minutes
-        trigger_space_min = self.config.record.cleanup_trigger_space
+        ) * self.config.record.cleanup.trigger_minutes
+        trigger_space_min = self.config.record.cleanup.trigger_space
         free_storage_target = round(max(trigger_recording_space, trigger_space_min), 1)
         remaining_storage = round(shutil.disk_usage(RECORD_DIR).free / pow(2, 20), 1)
         needs_cleanup = remaining_storage < free_storage_target
         logger.debug(
-            f"Storage cleanup needed: {needs_cleanup}. {free_storage_target} MB to trigger cleanup (recording time: {hourly_bandwidth} MB * {self.config.record.cleanup_trigger_minutes} minutes = {trigger_recording_space}, min space: {trigger_space_min}) with remaining storage: {remaining_storage} MB."
+            f"Storage cleanup needed: {needs_cleanup}. {free_storage_target} MB to trigger cleanup (recording time: {hourly_bandwidth} MB * {self.config.record.cleanup.trigger_minutes} minutes = {trigger_recording_space}, min space: {trigger_space_min}) with remaining storage: {remaining_storage} MB."
         )
         return needs_cleanup
 

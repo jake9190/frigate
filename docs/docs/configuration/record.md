@@ -68,19 +68,20 @@ record:
 
 ## Will Frigate delete old recordings if my storage runs out?
 
-As of Frigate 0.12 if there is less than an hour left of storage, the oldest 2 hours of recordings will be deleted. As of Frigate 0.15 this can be configured as needed to trigger when free space drops below a specified minutes of recording time or raw space available. You can also specify the amount of space to free, either in recording time or raw space. When both `_minutes` and `_space` types are specified, the larger calculated number is used.
+As of Frigate 0.12 if there is less than an hour left of storage, the oldest 2 hours of recordings will be deleted. As of Frigate 0.15 this can be configured as needed to trigger when free space drops below a specified minutes of recording time or raw space available. You can also specify the amount of space to free, either in recording time or raw space. When both `_minutes` and `_space` configuration values are specified, the larger calculated number is used.
 
 ```yaml
 record:
-  cleanup_trigger_minutes: 60 # <- Trigger cleanup when 60 minutes of recording time is remaining
-  cleanup_target_minutes: 120 # <- Free up 120 minutes of total recording time
-  cleanup_trigger_space: 5000 # <-  Trigger cleanup when 5GB of disk space is remaining
-  cleanup_target_space: 100000 # <- Free up 100GB of total disk space
+  cleanup:
+    trigger_minutes: 60 # <- Trigger cleanup when 60 minutes of recording time is remaining
+    target_minutes: 120 # <- Free up 120 minutes of total recording time
+    trigger_space: 5000 # <-  Trigger cleanup when 5GB of disk space is remaining
+    target_space: 100000 # <- Free up 100GB of total disk space
 ```
 
 In the above example, a cleanup will trigger when either 60 minutes of recording time remains on disk, or when free space drops below 5GB. It will then free up space to ensure that a minimum of 120 minutes of recording time is available, or 100GB, whichever is larger.
 
-**WARNING**: Do not set both `_minutes` and `_space` types to zero as you may run out of disk space unless other recording retention policies are sufficient to maintain free space.
+**WARNING**: Do not set both `_minutes` and `_space` configuration values to zero as you may run out of disk space unless other recording retention policies are sufficient to maintain free space.
 
 ## Configuring Recording Retention
 
